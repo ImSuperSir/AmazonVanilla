@@ -128,6 +128,7 @@
 
 .product-spacer {
   flex: 1;
+  background-color: cyan;
 }
 
 .added-to-cart {
