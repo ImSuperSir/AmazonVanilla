@@ -59,10 +59,13 @@ products.forEach((pProduct) =>
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 
-const addMmessagesTimeouts = {};  //this a dictionary in javascript
+//const addMmessagesTimeouts = {};  //this a dictionary in javascript
 
 document.querySelectorAll('.js-add-to-cart').forEach((button) =>
 {
+
+  let messageTimeOutId;
+
   button.addEventListener('click', () =>
   {
     console.log(button.dataset);
@@ -96,7 +99,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) =>
     let quantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
     const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
     addedMessage.classList.add("added-to-cart-visibility");
-    let messageTimeOutId = addMmessagesTimeouts[productId]; // we check if th productid already has an timeout 
+    //let messageTimeOutId = addMmessagesTimeouts[productId]; // we check if th productid already has an timeout 
 
     if (messageTimeOutId)
     {
@@ -109,7 +112,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) =>
     }, 2000
     );
 
-    addMmessagesTimeouts[productId] = messageTimeOutId;
+    // addMmessagesTimeouts[productId] = messageTimeOutId;
 
     //  console.log(lQuantitySelect);
 
