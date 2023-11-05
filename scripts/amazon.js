@@ -40,7 +40,7 @@ products.forEach((pProduct) =>
 
         <!-- <div class="product-spacer"></div> -->
 
-        <div class="added-to-cart ">
+        <div class="added-to-cart js-added-to-cart-${pProduct.id}">
           <img src="images/icons/checkmark.png">
           Added
         </div>
@@ -58,14 +58,18 @@ products.forEach((pProduct) =>
 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+
+const addMmessagesTimeouts = {};  //this a dictionary in javascript
+
 document.querySelectorAll('.js-add-to-cart').forEach((button) =>
 {
   button.addEventListener('click', () =>
   {
-    // console.log(button.dataset);
+    console.log(button.dataset);
     // console.log(button.dataset.productName);
     //console.log(button.dataset.productId);
-    const productId = button.dataset.productId;
+    //const productId = button.dataset.productId;
+    const { productId } = button.dataset;   //destructuring
     // console.log(productId);
     let matchingItem;
 
@@ -89,20 +93,38 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) =>
 
     // let lSelector = `.js-quantity-selector-${productId}`
     // console.log(lSelector);
-    let lQuantitySelect = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
+    let quantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
+    const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+    addedMessage.classList.add("added-to-cart-visibility");
+    let messageTimeOutId = addMmessagesTimeouts[productId]; // we check if th productid already has an timeout 
+
+    if (messageTimeOutId)
+    {
+      clearTimeout(messageTimeOutId);
+    }
+
+    messageTimeOutId = setTimeout(() =>
+    {
+      addedMessage.classList.remove("added-to-cart-visibility");
+    }, 2000
+    );
+
+    addMmessagesTimeouts[productId] = messageTimeOutId;
 
     //  console.log(lQuantitySelect);
 
     if (matchingItem)
     {
-      matchingItem.quantity += lQuantitySelect;
+      matchingItem.quantity += quantity;
     }
     else
     {
       cart.push(
         {
-          productId: productId,
-          quantity: lQuantitySelect
+          // productId: productId,
+          // quantity: lQuantitySelect
+          productId,           //this is using destructuring
+          quantity             //this is using destructuring
         });
 
     }
@@ -111,7 +133,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) =>
 
     cart.forEach((itemInCar) =>
     {
-      lQuantity +=  itemInCar.quantity;
+      lQuantity += itemInCar.quantity;
     });
 
     document.querySelector('.js-cart-quantity').innerHTML = lQuantity;
