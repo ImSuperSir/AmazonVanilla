@@ -1,5 +1,5 @@
-import { cart} from '../data/cart.js';
-import {products} from '../data/products.js';
+import { cart, addToCart } from '../data/cart.js';
+import { products } from '../data/products.js';
 
 let productsHTML = '';
 
@@ -61,89 +61,45 @@ products.forEach((pProduct) =>
 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+function updateCartQuantity(){
+    //we count all the items in the car to display them in the bar
+    let lQuantity = 0;
+    cart.forEach((cartItem) =>
+    {
+      lQuantity += cartItem.quantity;
+    });
+    //we display the quantity in the header of the page
+    document.querySelector('.js-cart-quantity').innerHTML = lQuantity;
+}
 
-//const addMmessagesTimeouts = {};  //this a dictionary in javascript
+/*
+Just to visibilize the label added and 
+put it invisible after 2 seconds*/ 
+function displayAddedToCartMessage(productId){
+  let messageTimeOutId;
+  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+  addedMessage.classList.add("added-to-cart-visibility");
+  if (messageTimeOutId)
+  {
+    clearTimeout(messageTimeOutId);
+  }
+
+  messageTimeOutId = setTimeout(() =>
+  {
+    addedMessage.classList.remove("added-to-cart-visibility");
+  }, 2000
+  );
+
+}
 
 document.querySelectorAll('.js-add-to-cart').forEach((button) =>
 {
-
-  let messageTimeOutId;
-
   button.addEventListener('click', () =>
   {
     console.log(button.dataset);
-    // console.log(button.dataset.productName);
-    //console.log(button.dataset.productId);
-    //const productId = button.dataset.productId;
     const { productId } = button.dataset;   //destructuring
-    // console.log(productId);
-    let matchingItem;
-
-    // cart.forEach( (item) => {
-    //   console.log(`Item : ${item.productId}`);
-    // });
-
-    cart.forEach((item) =>
-    {
-      //console.log(`productid: ${productId} -itemId:${item.id}`);
-      if (productId === item.productId)
-      {
-        matchingItem = item;
-        // console.log('Yes,we have it...');
-      }
-      // else
-      // {
-      //   console.log('We do not have it..')
-      // }
-    });
-
-    // let lSelector = `.js-quantity-selector-${productId}`
-    // console.log(lSelector);
-    let quantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
-    const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
-    addedMessage.classList.add("added-to-cart-visibility");
-    //let messageTimeOutId = addMmessagesTimeouts[productId]; // we check if th productid already has an timeout 
-
-    if (messageTimeOutId)
-    {
-      clearTimeout(messageTimeOutId);
-    }
-
-    messageTimeOutId = setTimeout(() =>
-    {
-      addedMessage.classList.remove("added-to-cart-visibility");
-    }, 2000
-    );
-
-    // addMmessagesTimeouts[productId] = messageTimeOutId;
-
-    //  console.log(lQuantitySelect);
-
-    if (matchingItem)
-    {
-      matchingItem.quantity += quantity;
-    }
-    else
-    {
-      cart.push(
-        {
-          // productId: productId,
-          // quantity: lQuantitySelect
-          productId,           //this is using destructuring
-          quantity             //this is using destructuring
-        });
-
-    }
-
-    let lQuantity = 0;
-
-    cart.forEach((itemInCar) =>
-    {
-      lQuantity += itemInCar.quantity;
-    });
-
-    document.querySelector('.js-cart-quantity').innerHTML = lQuantity;
-
-    //console.log(cart);
+    addToCart(productId);
+    updateCartQuantity();
+    displayAddedToCartMessage(productId);
   });
 });
