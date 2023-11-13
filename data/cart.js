@@ -43,7 +43,8 @@ export function addToCart(productId)
     cart.push(
       {
         productId,           //this is using destructuring. "the collection property's name it is equal to the name of the properties"
-        quantity             //this is using destructuring
+        quantity,             //this is using destructuring
+        deliveryOptionId : '2'    
       });
   }
 
