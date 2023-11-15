@@ -1,8 +1,9 @@
 import { cart, removeFromCart, getItemsQuantity, updateQuantity, updateDeliveryOption } from '../../data/cart.js';
-import { products } from '../../data/products.js';
+import { products, getProduct } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js'
-import { deliveryOptions } from '../../data/deliveryOptions.js';
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+
 
 
 
@@ -12,22 +13,14 @@ export function renderOrderSummary()
 
   let cartSummaryHTML = '';
 
-  /* this is to look for the items in the cart and display them 
+  /* this is to look for the items in the cart and displayco them 
   in the checkout webPage */
 
   cart.forEach((cartItem) =>
   {
     const productId = cartItem.productId;
 
-    let matchingProduct;
-
-    products.forEach((product) =>
-    {
-      if (product.id === cartItem.productId)
-      {
-        matchingProduct = product;
-      }
-    });
+    const matchingProduct = getProduct(productId);
 
     // console.log(cartItem);
     // console.log(cartItem.deliveryOption)
@@ -36,26 +29,9 @@ export function renderOrderSummary()
 
     //console.log(matchingProduct);
 
-    const deliveryOptionId = cartItem.deliveryOptionId;
+    const lDeliveryOptionId = cartItem.deliveryOptionId;
 
-    let deliveryOption;
-
-    // console.log(cartItem);
-
-    // // console.log
-    // console.log(deliveryOptions);
-
-    // console.log(cartItem.deliveryOptionId);
-
-    deliveryOptions.forEach((option) =>
-    {
-      if (option.id === deliveryOptionId)
-      {
-        deliveryOption = option;
-        // console.log(option);
-
-      }
-    });
+    const deliveryOption = getDeliveryOption(lDeliveryOptionId);
 
 
     // console.log(deliveryOption);
@@ -180,7 +156,7 @@ export function renderOrderSummary()
     updatelink.addEventListener('click', () =>
     {
       const { productId } = updatelink.dataset;  //destructurin, the property is with the same name
-      console.log(productId);
+      //console.log(productId);
 
       const container = document.querySelector(`.js-cart-item-container-${productId}`);
       //const container2 = document.querySelector(`.js-cart-item-container-${productId}`);
@@ -197,7 +173,7 @@ export function renderOrderSummary()
     {
       const { productId } = savelink.dataset;
       const quantityInput = document.querySelector(`.js-quantity-input-${productId}`);
-      console.log(quantityInput);
+      //console.log(quantityInput);
       const newQuantity = Number(quantityInput.value);
 
       if (newQuantity < 0 || newQuantity >= 1000)

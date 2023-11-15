@@ -1,3 +1,18 @@
+export function getProduct(pProductId){
+
+  let lMatchingProduct;
+  products.forEach((product) =>
+  {
+    if (product.id === pProductId)
+    {
+      lMatchingProduct = product;
+    }
+  });
+
+  return lMatchingProduct;
+}
+
+
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -658,3 +673,4 @@ export const products = [
     ]
   }
 ];
+
