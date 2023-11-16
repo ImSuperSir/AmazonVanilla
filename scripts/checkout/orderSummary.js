@@ -21,37 +21,18 @@ export function renderOrderSummary()
   cart.forEach((cartItem) =>
   {
     const productId = cartItem.productId;
-
     const matchingProduct = getProduct(productId);
-
-    // console.log(cartItem);
-    // console.log(cartItem.deliveryOption)
-    // const lDeliveryOptionId = cartItem.deliveryOption;
-    // console.log(lDeliveryOptionId);
-
-    //console.log(matchingProduct);
-
     const lDeliveryOptionId = cartItem.deliveryOptionId;
-
     const deliveryOption = getDeliveryOption(lDeliveryOptionId);
-
-
-    // // console.log(deliveryOption);
-    // const today = dayjs();
-    // const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    // const dateString = deliveryDate.format('dddd, MMMM D');
-
 
     cartSummaryHTML +=
       `<div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
               <div class="delivery-date">
                 Delivery date: ${calculateDeliveryDate(deliveryOption)}
               </div>
-
               <div class="cart-item-details-grid">
                 <img class="product-image"
                   src="${matchingProduct.image}">
-
                 <div class="cart-item-details">
                   <div class="product-name">
                     ${matchingProduct.name}
@@ -75,14 +56,11 @@ export function renderOrderSummary()
                     </span>
                   </div>
                 </div>
-
                 <div class="delivery-options">
                   <div class="delivery-options-title">
                     Choose a delivery option:
                   </div>
-
                   ${deliveryOptionsHTML(matchingProduct, cartItem)}
-
                 </div>
               </div>
             </div>
@@ -91,19 +69,11 @@ export function renderOrderSummary()
 
   function deliveryOptionsHTML(matchingProduct, cartItem)
   {
-
     let html = '';
     deliveryOptions.forEach((deliveryOption) =>
     {
-
-
-      // const today = dayjs();
-      // const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-      // const dateString = deliveryDate.format('dddd, MMMM D');
       const priceString = deliveryOption.priceCents === 0 ? 'FREE -' : `$${formatCurrency(deliveryOption.priceCents)} - `;
       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
-
-      // console.log(`${cartItem.deliveryOptionId}`);
 
       html += `
             <div class="delivery-option js-delivery-option"
@@ -123,16 +93,12 @@ export function renderOrderSummary()
               </div>
             </div>
             `
-
     });
 
-    // console.log(html);
     return html;
   }
 
   document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
-
-  // document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
 
   document.querySelectorAll('.js-delete-quantity-link')
     .forEach((link) =>
@@ -143,12 +109,6 @@ export function renderOrderSummary()
         const { productId } = link.dataset;  //with destructuration using the curly brackets, const productId = link.dataset.productId  <= this is the normal form
         removeFromCart(productId);
 
-
-
-        // console.log(container);
-        //document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
-        // const container = document.querySelector(`.js-cart-item-container-${productId}`);
-        // container.remove();
         renderCheckOutHeader();
         renderOrderSummary();
         renderPaymentSummary();
@@ -161,12 +121,8 @@ export function renderOrderSummary()
     updatelink.addEventListener('click', () =>
     {
       const { productId } = updatelink.dataset;  //destructurin, the property is with the same name
-      //console.log(productId);
-
       const container = document.querySelector(`.js-cart-item-container-${productId}`);
-      //const container2 = document.querySelector(`.js-cart-item-container-${productId}`);
       container.classList.add('is-editing-quantity');
-
     })
 
 
@@ -178,7 +134,6 @@ export function renderOrderSummary()
     {
       const { productId } = savelink.dataset;
       const quantityInput = document.querySelector(`.js-quantity-input-${productId}`);
-      //console.log(quantityInput);
       const newQuantity = Number(quantityInput.value);
 
       if (newQuantity < 0 || newQuantity >= 1000)
@@ -191,12 +146,6 @@ export function renderOrderSummary()
 
       const container = document.querySelector(`.js-cart-item-container-${productId}`);
       container.classList.remove('is-editing-quantity');
-
-      // const quanttyLabel = document.querySelector(`.js-quantity-label-${productId}`)
-      // quanttyLabel.innerHTML = newQuantity;
-
-
-      //document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
       renderCheckOutHeader();
       renderOrderSummary();
       renderPaymentSummary();

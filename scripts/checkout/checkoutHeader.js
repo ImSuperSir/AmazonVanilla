@@ -30,4 +30,3 @@ export function renderCheckOutHeader()
 }
 
 
-//document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();

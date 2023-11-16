@@ -67,10 +67,6 @@ document.querySelector('.js-cart-quantity').innerHTML = getItemsQuantity();
 function updateCartQuantity(){
     //we count all the items in the car to display them in the bar
     const lQuantity = getItemsQuantity();
-    // cart.forEach((cartItem) =>
-    // {
-    //   lQuantity += cartItem.quantity;
-    // });
     //we display the quantity in the header of the page
     document.querySelector('.js-cart-quantity').innerHTML = lQuantity;
 

@@ -21,8 +21,6 @@ export function renderPaymentSummary()
 
   });
 
-  // console.log(lProductPriceCents);
-  // console.log(lShippingPriceCents);
   const lTotalBeforeTaxCents = lProductPriceCents + lShippingPriceCents;
   const lTaxCents = lTotalBeforeTaxCents * 0.1;
   const lTotalCents = lTotalBeforeTaxCents + lTaxCents;

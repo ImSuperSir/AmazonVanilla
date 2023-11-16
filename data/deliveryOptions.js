@@ -35,17 +35,10 @@ export function getDeliveryOption(pDeliveryOptionId){
       lDeliveryOption = option;
     }
   });
-
   return lDeliveryOption;
-  
 }
 
 export function calculateDeliveryDate(pDeliveryOption){
-  // const today = dayjs();
-  // const deliveryDate = today.add(pDeliveryOption.deliveryDays, 'days');
-  // const lDateString = deliveryDate.format('dddd, MMMM D');
-  // return lDateString;
-
   let remainingDays = pDeliveryOption.deliveryDays;
   let deliveryDate = dayjs();
 
@@ -54,13 +47,8 @@ export function calculateDeliveryDate(pDeliveryOption){
 
     if (!isWeekend(deliveryDate)) {
       remainingDays--;
-      // This is a shortcut for:
-      // remainingDays = remainingDays - 1;
     }
   }
-
-  const dateString = deliveryDate.format(
-    'dddd, MMMM D');
-
+  const dateString = deliveryDate.format('dddd, MMMM D');
   return dateString;
 }
