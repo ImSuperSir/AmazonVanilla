@@ -1,9 +1,10 @@
 import { cart, removeFromCart, getItemsQuantity, updateQuantity, updateDeliveryOption } from '../../data/cart.js';
 import { products, getProduct } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js'
-import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
+import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { renderPaymentSummary } from './paymentSummary.js'
+import { renderCheckOutHeader } from './checkoutHeader.js'
 
 
 
@@ -35,16 +36,16 @@ export function renderOrderSummary()
     const deliveryOption = getDeliveryOption(lDeliveryOptionId);
 
 
-    // console.log(deliveryOption);
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    // // console.log(deliveryOption);
+    // const today = dayjs();
+    // const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
+    // const dateString = deliveryDate.format('dddd, MMMM D');
 
 
     cartSummaryHTML +=
       `<div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
               <div class="delivery-date">
-                Delivery date: ${dateString}
+                Delivery date: ${calculateDeliveryDate(deliveryOption)}
               </div>
 
               <div class="cart-item-details-grid">
@@ -96,9 +97,9 @@ export function renderOrderSummary()
     {
 
 
-      const today = dayjs();
-      const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-      const dateString = deliveryDate.format('dddd, MMMM D');
+      // const today = dayjs();
+      // const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
+      // const dateString = deliveryDate.format('dddd, MMMM D');
       const priceString = deliveryOption.priceCents === 0 ? 'FREE -' : `$${formatCurrency(deliveryOption.priceCents)} - `;
       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
@@ -114,7 +115,7 @@ export function renderOrderSummary()
                 name="delivery-option-${matchingProduct.id}">
               <div>
                 <div class="delivery-option-date">
-                    ${dateString}
+                    ${calculateDeliveryDate(deliveryOption)}
                 </div>
                 <div class="delivery-option-price">
                     ${priceString} - Shipping
@@ -131,7 +132,7 @@ export function renderOrderSummary()
 
   document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
-  document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
+  // document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
 
   document.querySelectorAll('.js-delete-quantity-link')
     .forEach((link) =>
@@ -142,13 +143,14 @@ export function renderOrderSummary()
         const { productId } = link.dataset;  //with destructuration using the curly brackets, const productId = link.dataset.productId  <= this is the normal form
         removeFromCart(productId);
 
-        const container = document.querySelector(`.js-cart-item-container-${productId}`);
+
 
         // console.log(container);
-        document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
-
-        container.remove();
-
+        //document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
+        // const container = document.querySelector(`.js-cart-item-container-${productId}`);
+        // container.remove();
+        renderCheckOutHeader();
+        renderOrderSummary();
         renderPaymentSummary();
 
       });
@@ -190,11 +192,13 @@ export function renderOrderSummary()
       const container = document.querySelector(`.js-cart-item-container-${productId}`);
       container.classList.remove('is-editing-quantity');
 
-      const quanttyLabel = document.querySelector(`.js-quantity-label-${productId}`)
-      quanttyLabel.innerHTML = newQuantity;
+      // const quanttyLabel = document.querySelector(`.js-quantity-label-${productId}`)
+      // quanttyLabel.innerHTML = newQuantity;
 
 
-      document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
+      //document.querySelector('.js-return-to-home-link').innerHTML = getItemsQuantity();
+      renderCheckOutHeader();
+      renderOrderSummary();
       renderPaymentSummary();
 
     });
